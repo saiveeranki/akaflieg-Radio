@@ -5,6 +5,7 @@ import { FlightScenario, RadioService, TranscriptionEntry } from './types';
 import { generateScenario, getSystemInstruction } from './services/geminiService';
 import { RadioPanel } from './components/RadioPanel';
 import { ScenarioCard } from './components/ScenarioCard';
+import { AkafliegLogo } from './components/AkafliegLogo';
 import { decode, encode, decodeAudioData, createPcmBlob } from './utils/audio-helpers';
 
 const App: React.FC = () => {
@@ -165,28 +166,30 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen p-4 md:p-8 flex flex-col items-center max-w-6xl mx-auto">
-      {/* Header */}
-      <header className="w-full flex justify-between items-center mb-8 border-b border-slate-800 pb-4">
-        <div className="flex items-center gap-3">
-          <div className="bg-amber-500 p-2 rounded shadow-[0_0_15px_rgba(245,158,11,0.5)]">
-            <svg className="w-6 h-6 text-slate-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14M5 12l4-4m-4 4l4 4" />
-            </svg>
+      {/* Branded Header */}
+      <header className="w-full flex justify-between items-center mb-8 border-b border-slate-800 pb-6">
+        <div className="flex items-center gap-6">
+          <AkafliegLogo className="w-12 h-12" />
+          <div className="h-10 w-px bg-slate-800 hidden md:block" />
+          <div className="hidden md:block">
+            <h1 className="text-2xl font-black tracking-tighter uppercase italic leading-none">
+              SkyTalk <span className="text-amber-500">Radio</span>
+            </h1>
+            <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">Official Simulator • Austrian ATC Integration</p>
           </div>
-          <h1 className="text-xl font-black tracking-tighter uppercase italic">SkyTalk <span className="text-amber-500">Radio</span></h1>
         </div>
         <button 
           onClick={loadNewScenario}
-          className="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold px-4 py-2 rounded transition-all active:scale-95 border border-slate-700"
+          className="bg-red-500 hover:bg-red-600 text-white text-xs font-black uppercase px-6 py-2.5 rounded transition-all active:scale-95 shadow-[0_0_20px_rgba(239,68,68,0.3)]"
         >
-          New Scenario
+          Generate New Mission
         </button>
       </header>
 
       {loading ? (
         <div className="flex-1 flex flex-col items-center justify-center space-y-4">
-          <div className="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
-          <p className="text-slate-400 font-bold animate-pulse tracking-widest uppercase text-xs">Initializing Flight Systems...</p>
+          <div className="w-16 h-16 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-slate-400 font-bold animate-pulse tracking-widest uppercase text-xs">Akaflieg Graz Systems Check...</p>
         </div>
       ) : error ? (
         <div className="bg-red-900/20 border border-red-500 text-red-200 p-6 rounded-lg text-center max-w-md">
@@ -200,8 +203,11 @@ const App: React.FC = () => {
             {scenario && <ScenarioCard scenario={scenario} />}
             
             {/* Communication Log */}
-            <div className="bg-slate-900/50 rounded-xl border border-slate-800 p-4 h-96 flex flex-col shadow-inner">
-              <h3 className="text-slate-500 text-[10px] font-black uppercase mb-4 tracking-widest px-2 opacity-50">Radio Transcription Log</h3>
+            <div className="bg-slate-900/50 rounded-xl border border-slate-800 p-4 h-[450px] flex flex-col shadow-inner">
+              <h3 className="text-slate-500 text-[10px] font-black uppercase mb-4 tracking-widest px-2 opacity-50 flex justify-between">
+                <span>Radio Transcription Log</span>
+                <span>Active Link: {activeFrequency} MHz</span>
+              </h3>
               <div className="flex-1 overflow-y-auto space-y-4 px-2 scroll-smooth">
                 {transcriptions.length === 0 && (
                   <div className="h-full flex items-center justify-center text-slate-600 italic text-sm">
@@ -237,27 +243,28 @@ const App: React.FC = () => {
               onPttEnd={handlePttEnd}
             />
             
-            <div className="mt-8 p-4 bg-slate-800/30 rounded-lg border border-slate-700 w-full">
-              <h4 className="text-amber-500 text-[10px] font-black uppercase mb-3 tracking-widest">Aviation Procedures</h4>
-              <ul className="text-slate-400 text-[11px] space-y-2 leading-relaxed">
-                <li className="flex gap-2">
-                  <span className="text-amber-500 font-bold">1.</span>
-                  <span>Set frequency in <span className="text-slate-200">STANDBY</span> then use the <span className="text-slate-200">FLIP (↔)</span> button to make it <span className="text-slate-200">ACTIVE</span>.</span>
+            <div className="mt-8 p-5 bg-slate-800/30 rounded-lg border border-slate-700 w-full">
+              <h4 className="text-red-500 text-[10px] font-black uppercase mb-4 tracking-widest">Akaflieg Training Protocol</h4>
+              <ul className="text-slate-400 text-[11px] space-y-3 leading-relaxed">
+                <li className="flex gap-3">
+                  <div className="w-5 h-5 rounded bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-500 font-black shrink-0">1</div>
+                  <span>Set frequency in <span className="text-slate-200">STANDBY</span> then use the <span className="text-slate-200">FLIP (↔)</span> button to make it <span className="text-slate-200 font-bold uppercase">Active</span>.</span>
                 </li>
-                <li className="flex gap-2">
-                  <span className="text-amber-500 font-bold">2.</span>
-                  <span>Listen to <span className="text-slate-200 italic">ATIS</span> first to get airport conditions and the current weather code.</span>
+                <li className="flex gap-3">
+                  <div className="w-5 h-5 rounded bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-500 font-black shrink-0">2</div>
+                  <span>Listen to <span className="text-amber-500 italic font-bold">ATIS Broadcast</span> in the Mission Briefing to get current weather and conditions.</span>
                 </li>
-                <li className="flex gap-2">
-                  <span className="text-amber-500 font-bold">3.</span>
-                  <span>Contact <span className="text-slate-200">GROUND</span> for taxi clearance.</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-amber-500 font-bold">4.</span>
-                  <span>Switch to <span className="text-slate-200">TOWER</span> only when instructed or ready at the holding point.</span>
+                <li className="flex gap-3">
+                  <div className="w-5 h-5 rounded bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-500 font-black shrink-0">3</div>
+                  <span>Speak clearly and use <span className="text-slate-200 italic underline">Standard ICAO Phraseology</span> (e.g., "Request Taxi", "Cleared for Takeoff").</span>
                 </li>
               </ul>
             </div>
+            
+            <footer className="mt-auto pt-8 text-center opacity-30">
+              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">SkyTalk x Akaflieg Graz</p>
+              <p className="text-[8px] text-slate-600 mt-1">Powered by Gemini 2.5 Flash Native Audio</p>
+            </footer>
           </div>
         </div>
       )}
