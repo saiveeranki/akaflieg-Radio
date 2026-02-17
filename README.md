@@ -4,34 +4,23 @@
 SkyTalk is an advanced aviation radio communication trainer designed for student pilots. It leverages the **Gemini 2.5 Flash Native Audio** model to provide a realistic, low-latency ATC interaction experience within a professional GUI.
 
 ## 🚀 Key Features
+- **Dynamic Context**: Realistic flight missions set in Austrian airports.
+- **High-Fidelity Radio Stack**: Professional Active/Standby frequency management.
+- **Native Audio Interaction**: Direct audio-to-audio conversation.
+- **Real-time Visualization**: Mic activity meters and radio status lights.
 
-### 1. Gemini-Powered Flight Scenarios
-- **Dynamic Context**: Generates realistic flight missions specifically set in Austrian airports (LOWW, LOWI, LOWS, LOWG, LOWL).
-- **Mission Briefing**: Provides specific callsigns, aircraft types (Diamond DA40, Cessna 172, etc.), current weather (ATIS), and training objectives.
-- **Phase-Specific Training**: Practice communications for Pre-flight, Taxi, Takeoff, Enroute, Approach, and Landing.
+## 🎓 Why the Paid Version is "Perfect"
+While the **Showcase Mode** provides a static preview, the **Live API (Paid Version)** introduces the **Logic Engine**:
 
-### 2. High-Fidelity Radio Interface
-- **Dual Frequency Stack**: Professional Active and Standby frequency management.
-- **Frequency Flip**: Instant ↔ swap logic, mirroring real Garmin or BendixKing COM radios.
-- **Manual Tuning**: 1MHz and 25kHz spacing tuning knobs for precise frequency selection.
-- **Push-to-Talk (PTT)**: Interactive PTT logic that streams raw PCM audio to the Gemini Live API.
+1. **Intelligent Read-Back Verification**: The AI controller actively listens to your response. If you forget to repeat a crucial instruction (like a holding point or a squawk code), it will stop you and demand a correct read-back.
+2. **Standardized English (ICAO)**: We have implemented strict system prompts to prevent "hallucinations" or non-English responses. The ATC is locked to International Aviation English.
+3. **Contextual Memory**: The AI remembers your previous calls. If you reported "Ready for Departure" 2 minutes ago, it won't ask you for your intentions again.
 
-### 3. Real-Time ATC Interaction
-- **Live Voice Response**: Speak to a simulated Austrian controller who responds with standard ICAO phraseology.
-- **ATIS Audio**: One-click TTS generation of ATIS information to practice weather comprehension.
-- **Transcription Log**: View a real-time text log of both your transmissions and the controller's responses for review.
-
-### 4. Technical Architecture
-- **AI Model**: `gemini-2.5-flash-native-audio-preview-12-2025` for natural voice conversation.
-- **Audio Pipeline**: Custom PCM encoding/decoding for raw audio streams via Web Audio API.
-- **Frontend**: React 19 with Tailwind CSS for a high-contrast, aviation-grade dark mode UI.
-
-## 🛩 Usage Protocol (Akaflieg Graz)
-
-1. **Briefing**: Read the mission objectives and listen to the ATIS broadcast.
-2. **Frequency Management**: Tune the correct service (Ground/Tower) into Standby and flip to Active.
-3. **Transmission**: Hold the PTT button, state your callsign and request, then release to listen.
-4. **Review**: Check the transcription log to ensure you followed correct phraseology.
+## 🔑 API Configuration
+This app requires a **Paid API Key** from Google AI Studio. 
+- Use the **"Select API Key"** button to link your key.
+- Ensure your Google Cloud Project has **Billing Enabled**.
+- **Important**: Gemini Live features are only available on paid-tier projects.
 
 ---
 *Developed for Akaflieg Graz. Educational tool for simulated radio communication only.*

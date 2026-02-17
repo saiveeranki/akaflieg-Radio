@@ -6,9 +6,10 @@ import { decode, decodeAudioData } from '../utils/audio-helpers';
 
 interface ScenarioCardProps {
   scenario: FlightScenario;
+  voice?: string;
 }
 
-export const ScenarioCard: React.FC<ScenarioCardProps> = ({ scenario }) => {
+export const ScenarioCard: React.FC<ScenarioCardProps> = ({ scenario, voice = 'Kore' }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoadingAudio, setIsLoadingAudio] = useState(false);
   const audioBufferRef = useRef<AudioBuffer | null>(null);
@@ -34,24 +35,20 @@ export const ScenarioCard: React.FC<ScenarioCardProps> = ({ scenario }) => {
     try {
       setIsLoadingAudio(true);
       
-      // Initialize AudioContext if needed
       if (!audioContextRef.current) {
         audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 24000 });
       }
 
-      // Explicitly resume in case it's suspended (common in modern browsers)
       if (audioContextRef.current.state === 'suspended') {
         await audioContextRef.current.resume();
       }
 
-      // Generate or reuse audio buffer
       if (!audioBufferRef.current) {
-        const base64 = await generateAtisAudio(scenario.atis);
+        const base64 = await generateAtisAudio(scenario.atis, voice);
         const uint8 = decode(base64);
         audioBufferRef.current = await decodeAudioData(uint8, audioContextRef.current, 24000, 1);
       }
 
-      // Play the buffer
       const source = audioContextRef.current.createBufferSource();
       source.buffer = audioBufferRef.current;
       source.connect(audioContextRef.current.destination);
@@ -62,7 +59,7 @@ export const ScenarioCard: React.FC<ScenarioCardProps> = ({ scenario }) => {
       setIsPlaying(true);
     } catch (error) {
       console.error("Failed to play ATIS:", error);
-      alert("Radio interference: Could not receive ATIS broadcast. Check your connection.");
+      alert("Radio interference: Could not receive ATIS broadcast.");
     } finally {
       setIsLoadingAudio(false);
     }
@@ -86,7 +83,7 @@ export const ScenarioCard: React.FC<ScenarioCardProps> = ({ scenario }) => {
           <p className="text-slate-200 leading-relaxed">{scenario.mission}</p>
           <div className="mt-4 p-3 bg-slate-900 rounded border border-slate-700 relative">
             <div className="flex justify-between items-center mb-1">
-              <span className="text-amber-500 text-xs font-bold block">ATIS INFORMATION</span>
+              <span className="text-amber-500 text-xs font-bold block">ATIS BROADCAST</span>
               <button 
                 onClick={handlePlayAtis}
                 disabled={isLoadingAudio}
