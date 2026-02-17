@@ -1,0 +1,7 @@
+{
+  "name": "SkyTalk: Aviation Radio Simulator",
+  "description": "An interactive aviation radio communication trainer using Gemini's Live API. Practice talking to ATC, Ground, and Information services in generated flight scenarios.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
